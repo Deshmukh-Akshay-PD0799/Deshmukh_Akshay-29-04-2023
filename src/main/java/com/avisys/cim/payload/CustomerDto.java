@@ -1,29 +1,14 @@
-package com.avisys.cim;
+package com.avisys.cim.payload;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
-
-@Entity
-@Table(name = "CUSTOMER")
-public class Customer {
-
-	@Id
-	@GeneratedValue(strategy=GenerationType.AUTO)
+public class CustomerDto {
 	private Long id;
 
-	@Column(name = "FIRST_NAME", nullable = false)
 	private String firstName;
 
-	@Column(name = "LAST_NAME", nullable = false)
 	private String lastName;
 
-	@Column(name = "MOBILE_NUMBER", unique = true, nullable = false)
 	private String mobileNumber;
-	
+
 	public Long getId() {
 		return id;
 	}
@@ -56,4 +41,6 @@ public class Customer {
 		this.mobileNumber = mobileNumber;
 	}
 
+	public CustomerDto() {
+	}
 }
