@@ -13,6 +13,7 @@ import com.avisys.cim.payload.CustomerDto;
 import com.avisys.cim.repository.CustomerRepo;
 import com.avisys.cim.service.CustomerService;
 
+//Implementation of Buissness Logic 
 @Service
 public class CustomerServiceImpl implements CustomerService {
 
@@ -80,17 +81,6 @@ public class CustomerServiceImpl implements CustomerService {
 		Customer addedCustomer = this.customerRepo.findByMobileNo(customer.getMobileNumber());
 		return this.modelMapper.map(addedCustomer, CustomerDto.class);
 	}
-//
-//	private CustomerDto CustomerToDto(Customer savedcustomer) {
-//		CustomerDto customerDto = this.modelMapper.map(savedcustomer, CustomerDto.class);
-//
-//		return customerDto;
-//	}
-//
-//	private Customer DtoToCustomer(CustomerDto cDto) {
-//		Customer customer = this.modelMapper.map(cDto, Customer.class);
-//		return customer;
-//	}
 
 	@Override
 	public CustomerDto addMobileNumber(Long id, String mobileNumber) throws DuplicateMobileNumberException {

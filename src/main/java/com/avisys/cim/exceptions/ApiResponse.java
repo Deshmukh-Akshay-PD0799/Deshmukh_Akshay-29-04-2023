@@ -1,5 +1,6 @@
 package com.avisys.cim.exceptions;
 
+//Response to customer when exception occur
 public class ApiResponse {
 	private String message;
 	private boolean success;

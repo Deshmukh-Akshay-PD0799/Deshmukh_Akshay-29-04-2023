@@ -1,5 +1,6 @@
 package com.avisys.cim.payload;
 
+// Temporary data transfer object
 public class CustomerDto {
 	private Long id;
 

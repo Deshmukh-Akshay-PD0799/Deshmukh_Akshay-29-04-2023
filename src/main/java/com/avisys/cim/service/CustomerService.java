@@ -4,7 +4,7 @@ import java.util.List;
 
 import com.avisys.cim.payload.CustomerDto;
 
-
+// Sevices which provided to the client
 public interface CustomerService {
 	List<CustomerDto> getAllCustomers();
 	
