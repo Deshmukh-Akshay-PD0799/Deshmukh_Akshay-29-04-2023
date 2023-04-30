@@ -13,7 +13,8 @@ import com.avisys.cim.payload.CustomerDto;
 import com.avisys.cim.repository.CustomerRepo;
 import com.avisys.cim.service.CustomerService;
 
-//Implementation of Buissness Logic 
+//Implementation of Buissness Logic
+
 @Service
 public class CustomerServiceImpl implements CustomerService {
 
@@ -105,4 +106,28 @@ public class CustomerServiceImpl implements CustomerService {
 		return this.modelMapper.map(updatedCustomer, CustomerDto.class);
 	}
 
+	// delete customer when customer has a mobileNumber
+//	@Override
+//	public void deleteCustomer(String mobileNumber) {
+//			Customer customer=this.customerRepo.findByMobileNo(mobileNumber);
+//			this.customerRepo.delete(customer);	
+//		}
+	
+	// delete customer when customer has multiple mobileNumber
+	@Override
+	public void deleteCustomer(String mobileNumber) {
+//			Customer customer=this.customerRepo.findByMobileNo(mobileNumber);
+			List<Customer> customers = this.customerRepo.findAllCustomers();
+
+			for (Customer c : customers) {
+				String[] m = c.getMobileNumber().split(",");
+				for (String str : m) {
+					if (str.equals(mobileNumber)) {
+						this.customerRepo.delete(c);
+					}
+				}
+			}
+	
+	}
 }
+

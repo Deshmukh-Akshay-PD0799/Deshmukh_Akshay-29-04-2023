@@ -5,6 +5,7 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -13,6 +14,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.avisys.cim.exceptions.ApiResponse;
 import com.avisys.cim.exceptions.DuplicateMobileNumberException;
 import com.avisys.cim.payload.CustomerDto;
 import com.avisys.cim.service.CustomerService;
@@ -64,7 +66,6 @@ public class CustomerController {
 	}
 
 
-
 	// Create Customer when mobile number is unique
 	@PostMapping("/")
 	public ResponseEntity<CustomerDto> createUser(@RequestBody CustomerDto cDto)
@@ -80,5 +81,12 @@ public class CustomerController {
 		CustomerDto updatedCustomer = customerService.addMobileNumber(id, mobileNumber);
 		return new ResponseEntity<CustomerDto>(updatedCustomer, HttpStatus.OK);
 
+	}
+	//Delete customer with mobile number
+	@DeleteMapping("/{mobileNumber}")
+	public ResponseEntity<ApiResponse>  deleteCustomer(@PathVariable String mobileNumber){
+	this.customerService.deleteCustomer(mobileNumber);
+	return new ResponseEntity<ApiResponse>(new ApiResponse("Customer deleted",true), HttpStatus.OK);
+	
 	}
 }

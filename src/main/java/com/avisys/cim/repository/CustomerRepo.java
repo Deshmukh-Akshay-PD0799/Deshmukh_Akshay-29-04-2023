@@ -35,5 +35,7 @@ public interface CustomerRepo extends JpaRepository<Customer, Long>{
 	void createCustomer(@Param("id") long id,@Param("firstName") String firstName, @Param("lastName") String lastName, @Param("mobileNumber") String mobileNumber);
 	
 	@Query("SELECT c FROM Customer c WHERE c.id = :id")
-	public Customer findByCustomerId(@Param("id") Long id);
+	Customer findByCustomerId(@Param("id") Long id);
+	
+	// void deleteById(Customer customer);
 }

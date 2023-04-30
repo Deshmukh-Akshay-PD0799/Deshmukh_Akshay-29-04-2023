@@ -4,7 +4,7 @@ import java.util.List;
 
 import com.avisys.cim.payload.CustomerDto;
 
-// Sevices which provided to the client
+// Services which provided to the client
 public interface CustomerService {
 	List<CustomerDto> getAllCustomers();
 	
@@ -19,5 +19,8 @@ public interface CustomerService {
 	CustomerDto createCustomer(CustomerDto cDto) throws com.avisys.cim.exceptions.DuplicateMobileNumberException;
 
 	CustomerDto addMobileNumber(Long id, String mobileNumber) throws com.avisys.cim.exceptions.DuplicateMobileNumberException;
+
+	void deleteCustomer(String mobileNumber);
+	
 	
 }
