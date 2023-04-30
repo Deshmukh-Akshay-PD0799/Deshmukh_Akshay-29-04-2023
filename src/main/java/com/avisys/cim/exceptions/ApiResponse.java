@@ -1,7 +1,6 @@
-package com.avisys.cim.payload;
+package com.avisys.cim.exceptions;
 
 public class ApiResponse {
-
 	private String message;
 	private boolean success;
 

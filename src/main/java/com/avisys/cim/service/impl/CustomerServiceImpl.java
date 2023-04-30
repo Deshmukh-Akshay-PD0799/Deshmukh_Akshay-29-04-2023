@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.avisys.cim.Customer;
+import com.avisys.cim.exceptions.DuplicateMobileNumberException;
 import com.avisys.cim.payload.CustomerDto;
 import com.avisys.cim.repository.CustomerRepo;
 import com.avisys.cim.service.CustomerService;
@@ -15,6 +16,8 @@ import com.avisys.cim.service.CustomerService;
 @Service
 public class CustomerServiceImpl implements CustomerService {
 
+	static long i=5;
+	
 	@Autowired
 	private CustomerRepo customerRepo;
 
@@ -24,7 +27,7 @@ public class CustomerServiceImpl implements CustomerService {
 	@Override
 	public CustomerDto getCustomer(String mobileNo) {
 		Customer customer = this.customerRepo.findByMobileNo(mobileNo);
-		
+
 		return this.modelMapper.map(customer, CustomerDto.class);
 	}
 
@@ -37,28 +40,56 @@ public class CustomerServiceImpl implements CustomerService {
 
 		return customerDtos;
 	}
-	
-	public List<CustomerDto> searchFirstName(String keyword){
-		List<Customer> firstName= this.customerRepo.searchByFirstName("%"+keyword+"%");
-		List<CustomerDto> first= firstName.stream().map((customer) -> this.modelMapper.map(customer, CustomerDto.class)).collect(Collectors.toList());
+
+	public List<CustomerDto> searchFirstName(String keyword) {
+		List<Customer> firstName = this.customerRepo.searchByFirstName("%" + keyword + "%");
+		List<CustomerDto> first = firstName.stream()
+				.map((customer) -> this.modelMapper.map(customer, CustomerDto.class)).collect(Collectors.toList());
 		return first;
-		
+
 	}
-	
-	public List<CustomerDto> searchLastName(String keyword){
-		List<Customer> lastName= this.customerRepo.searchByLastName("%"+keyword+"%");
-		List<CustomerDto> last= lastName.stream().map((customer) -> this.modelMapper.map(customer, CustomerDto.class)).collect(Collectors.toList());
+
+	public List<CustomerDto> searchLastName(String keyword) {
+		List<Customer> lastName = this.customerRepo.searchByLastName("%" + keyword + "%");
+		List<CustomerDto> last = lastName.stream().map((customer) -> this.modelMapper.map(customer, CustomerDto.class))
+				.collect(Collectors.toList());
 		return last;
-		
+
 	}
 
 	@Override
 	public List<CustomerDto> searchName(String keyword) {
-		
-		List<Customer> Name= this.customerRepo.searchByFullName("%"+keyword+"%");
-		List<CustomerDto> FullName= Name.stream().map((customer) -> this.modelMapper.map(customer, CustomerDto.class)).collect(Collectors.toList());
-		
-		return FullName  ;
+
+		List<Customer> Name = this.customerRepo.searchByFullName("%" + keyword + "%");
+		List<CustomerDto> FullName = Name.stream().map((customer) -> this.modelMapper.map(customer, CustomerDto.class))
+				.collect(Collectors.toList());
+
+		return FullName;
 	}
-	
+
+	@Override
+	public CustomerDto createCustomer(CustomerDto cDto) throws DuplicateMobileNumberException {
+	    Customer customer = this.modelMapper.map(cDto, Customer.class);
+	    if (this.customerRepo.findByMobileNo(customer.getMobileNumber()) != null) {
+	        throw new DuplicateMobileNumberException("Unable to create Customer. Mobile number already present");
+	    }
+	    customer.setId(i);
+	    this.customerRepo.createCustomer(customer.getId(), customer.getFirstName(), customer.getLastName(),
+	            customer.getMobileNumber());
+	    i++;
+	    Customer addedCustomer = this.customerRepo.findByMobileNo(customer.getMobileNumber());
+	    return this.modelMapper.map(addedCustomer, CustomerDto.class);
+	}
+//
+//	private CustomerDto CustomerToDto(Customer savedcustomer) {
+//		CustomerDto customerDto = this.modelMapper.map(savedcustomer, CustomerDto.class);
+//
+//		return customerDto;
+//	}
+//
+//	private Customer DtoToCustomer(CustomerDto cDto) {
+//		Customer customer = this.modelMapper.map(cDto, Customer.class);
+//		return customer;
+//	}
+
 }
