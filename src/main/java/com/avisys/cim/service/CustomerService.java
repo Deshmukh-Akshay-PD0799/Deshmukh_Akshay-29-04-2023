@@ -17,5 +17,7 @@ public interface CustomerService {
 	List<CustomerDto> searchName(String keyword);
 
 	CustomerDto createCustomer(CustomerDto cDto) throws com.avisys.cim.exceptions.DuplicateMobileNumberException;
+
+	CustomerDto addMobileNumber(Long id, String mobileNumber) throws com.avisys.cim.exceptions.DuplicateMobileNumberException;
 	
 }

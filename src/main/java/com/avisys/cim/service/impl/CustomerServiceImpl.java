@@ -16,8 +16,8 @@ import com.avisys.cim.service.CustomerService;
 @Service
 public class CustomerServiceImpl implements CustomerService {
 
-	static long i=5;
-	
+	static long i = 5;
+
 	@Autowired
 	private CustomerRepo customerRepo;
 
@@ -69,16 +69,16 @@ public class CustomerServiceImpl implements CustomerService {
 
 	@Override
 	public CustomerDto createCustomer(CustomerDto cDto) throws DuplicateMobileNumberException {
-	    Customer customer = this.modelMapper.map(cDto, Customer.class);
-	    if (this.customerRepo.findByMobileNo(customer.getMobileNumber()) != null) {
-	        throw new DuplicateMobileNumberException("Unable to create Customer. Mobile number already present");
-	    }
-	    customer.setId(i);
-	    this.customerRepo.createCustomer(customer.getId(), customer.getFirstName(), customer.getLastName(),
-	            customer.getMobileNumber());
-	    i++;
-	    Customer addedCustomer = this.customerRepo.findByMobileNo(customer.getMobileNumber());
-	    return this.modelMapper.map(addedCustomer, CustomerDto.class);
+		Customer customer = this.modelMapper.map(cDto, Customer.class);
+		if (this.customerRepo.findByMobileNo(customer.getMobileNumber()) != null) {
+			throw new DuplicateMobileNumberException("Unable to create Customer. Mobile number already present");
+		}
+		customer.setId(i);
+		this.customerRepo.createCustomer(customer.getId(), customer.getFirstName(), customer.getLastName(),
+				customer.getMobileNumber());
+		i++;
+		Customer addedCustomer = this.customerRepo.findByMobileNo(customer.getMobileNumber());
+		return this.modelMapper.map(addedCustomer, CustomerDto.class);
 	}
 //
 //	private CustomerDto CustomerToDto(Customer savedcustomer) {
@@ -91,5 +91,28 @@ public class CustomerServiceImpl implements CustomerService {
 //		Customer customer = this.modelMapper.map(cDto, Customer.class);
 //		return customer;
 //	}
+
+	@Override
+	public CustomerDto addMobileNumber(Long id, String mobileNumber) throws DuplicateMobileNumberException {
+		List<Customer> customers = this.customerRepo.findAllCustomers();
+
+		for (Customer c : customers) {
+			String[] m = c.getMobileNumber().split(",");
+			for (String str : m) {
+				if (str.equals(mobileNumber)) {
+					throw new DuplicateMobileNumberException(
+							"Unable to create Customer. Mobile number already present");
+				}
+			}
+		}
+
+		Customer customer = this.customerRepo.findByCustomerId(id);
+		StringBuilder sb = new StringBuilder(customer.getMobileNumber());
+		sb.append(",");
+		sb.append(mobileNumber);
+		customer.setMobileNumber(sb.toString());
+		Customer updatedCustomer = customerRepo.save(customer);
+		return this.modelMapper.map(updatedCustomer, CustomerDto.class);
+	}
 
 }
