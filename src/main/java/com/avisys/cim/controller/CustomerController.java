@@ -86,7 +86,14 @@ public class CustomerController {
 	@DeleteMapping("/{mobileNumber}")
 	public ResponseEntity<ApiResponse>  deleteCustomer(@PathVariable String mobileNumber){
 	this.customerService.deleteCustomer(mobileNumber);
-	return new ResponseEntity<ApiResponse>(new ApiResponse("Customer deleted",true), HttpStatus.OK);
+	return new ResponseEntity<ApiResponse>(new ApiResponse("Customer deleted",true), HttpStatus.OK);	
+	}
 	
+	// delete a mobile number for existing customer
+	@DeleteMapping("/{id}/{mobileNumber}")
+	public ResponseEntity<ApiResponse> deleteMobileNo(@PathVariable long id, @PathVariable String mobileNumber){
+		this.customerService.deleteMobileNo(id,mobileNumber );
+		return new ResponseEntity<ApiResponse>(new ApiResponse("MobileNo deleted",true), HttpStatus.OK);
+		
 	}
 }

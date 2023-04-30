@@ -1,5 +1,6 @@
 package com.avisys.cim.service.impl;
 
+import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -123,11 +124,26 @@ public class CustomerServiceImpl implements CustomerService {
 				String[] m = c.getMobileNumber().split(",");
 				for (String str : m) {
 					if (str.equals(mobileNumber)) {
+						StringBuilder sb = new StringBuilder(str);
 						this.customerRepo.delete(c);
 					}
 				}
 			}
 	
 	}
-}
 
+	@Override
+	public void deleteMobileNo(long id, String mobileNumber) {
+	    Customer customer = this.customerRepo.findByCustomerId(id);
+	    String[] m = customer.getMobileNumber().split(",");
+	    StringBuilder sb = new StringBuilder(customer.getMobileNumber());
+	    for (String str : m) {
+	        if (str.equals(mobileNumber)) {
+	            sb.delete(sb.indexOf(str), sb.indexOf(str) + str.length() + 1);
+	            break;
+	        }
+	    }
+	    customer.setMobileNumber(sb.toString());
+	    this.customerRepo.save(customer);
+	}
+}
